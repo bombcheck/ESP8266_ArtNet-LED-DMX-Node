@@ -1,5 +1,6 @@
 # ESP8266_LED-DMX-ArtNetNode
-ESP8266 based WiFi ArtNet V4 to DMX, RDM and LED Pixels
+ESP8266 based WiFi ArtNet V4 to DMX, RDM and LED Pixels.
+Forked this from the great work of [Matthew Tong](https://github.com/mtongnz) because I love all kinds of shining/flashing/moving lighting stuff and needed some modifications to suit my needs.
 
 ## Getting Started
 ### Compiling
@@ -77,3 +78,6 @@ These boards use strange numbering that doesn't match the ESP8266 numbering.  He
 | RX | GPIO3 | DMX_RX (for A & B) |
 | D1 | GPIO5 | DMX_DIR_A |
 | D0 | GPIO16 | DMX_DIR_B |
+
+## Special thanks to
+[Matthew Tong](https://github.com/mtongnz) for the great work this fork is based upon.
