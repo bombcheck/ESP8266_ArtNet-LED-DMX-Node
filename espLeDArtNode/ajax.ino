@@ -1,5 +1,5 @@
 /*
-ESP8266_LED-DMX-ArtNetNode v1.0.0
+ESP8266_LED-DMX-ArtNetNode v1.0.1
 https://github.com/bombcheck/ESP8266_LED-DMX-ArtNetNode
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
