@@ -1,9 +1,6 @@
 # ESP8266_LED-DMX-ArtNetNode
 ESP8266 based WiFi ArtNet V4 to DMX, RDM and LED Pixels
 
-## Known Issues & Feedback
-Please see the issues tab for known issues or to submit bugs or suggestions
-
 ## Getting Started
 ### Compiling
  - You need the latest ESP8266 Arduino Core files and the latest Arduino IDE version.
@@ -14,10 +11,10 @@ Please see the issues tab for known issues or to submit bugs or suggestions
 ### First Boot
 On your first boot, the device will start a hotspot called "espLeDArtNode" with a password of "espLeDArtNode" (case sensitive).  Login to the hotspot and goto http://10.0.17.1 in a web browser.
 
-Note that the hotspot is, by default, only for accessing the settings page.  You'll need to enable Stand Alone mode in the web UI if you want to send ArtNet to the device in hotspot mode.
+Note that the hotspot is, by default, only for accessing the settings page.  You'll need to enable Stand Alone mode in the web UI if you want to send ArtNet data to the device in hotspot mode.
 
 ### Web-UI
-In hotspot mode, goto 2.0.0.1 and in Wifi mode goto whatever the device IP might be - either static or assigned by DHCP.
+In hotspot mode, goto 10.0.17.1 and in Wifi mode goto whatever the device IP might be - either static or assigned by DHCP.
 
 In the Wifi tab, enter your SSID and password.  Click save (it should go green and say Settings Saved).  Now click reboot and the device should connect to your Wifi.
 
@@ -26,12 +23,9 @@ If the device can't connect to the wifi or get a DHCP assigned address within (S
 ### Restore Factory Defaults
 I have allowed for 2 methods to restore the factory default settings: using a dedicated factory reset button on GPIO14 or multiple power cycles.
 
-Method 1: Hold GPIO14 to GND while the device boots.  This method isn't available for the ESP01 or NO_RESET builds.
+Method 1: Hold GPIO14 to GND while the device boots.
 
 Method 2: Allow the esp8266 about 1-4 seconds to start, then reset it (or power cycle).  Do this at least 5 times to restore factory default settings.
-
-### DMX Workshop
-I have implemented as many DMX Workshop/ArtNet V4 features as I possibly could.  You can change settings such as merge mode, IP address, DHCP, port addresses, node name...  Most of these are also available via the web UI.
 
 ## Features
  - sACN and ArtNet V4 support
