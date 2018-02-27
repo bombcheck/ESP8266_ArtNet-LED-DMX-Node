@@ -16,7 +16,7 @@ On your first boot, the device will start a hotspot called "espLeDArtNode" with 
 
 Note that the hotspot is, by default, only for accessing the settings page.  You'll need to enable Stand Alone mode in the web UI if you want to send ArtNet to the device in hotspot mode.
 
-### Web UI
+### Web-UI
 In hotspot mode, goto 2.0.0.1 and in Wifi mode goto whatever the device IP might be - either static or assigned by DHCP.
 
 In the Wifi tab, enter your SSID and password.  Click save (it should go green and say Settings Saved).  Now click reboot and the device should connect to your Wifi.
