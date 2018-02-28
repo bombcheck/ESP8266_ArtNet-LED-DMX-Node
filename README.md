@@ -4,7 +4,12 @@ ESP8266 based WiFi ArtNet V4 to DMX, RDM and LED Pixels.
 Forked this from the great work of [Matthew Tong](https://github.com/mtongnz) because I love all kinds of shining/flashing/moving lighting stuff and needed some modifications to suit my needs.
 
 ## Getting Started
-### Compiling
+### Pre-Compiled binaries
+Check the 'release'-section for the latest ready-to-flash-binaries. Download and flash with flasher of your choice. For example the [NodeMCU PyFlasher](https://github.com/marcelstoer/nodemcu-pyflasher/releases)
+
+**Attention: These pre-compiled binaries are only for NodeMCU-boards!**
+
+### Compiling from source
  - You need the latest ESP8266 Arduino Core files and the latest Arduino IDE version.
  - Make sure you placed the libraries from this project into your Arduino libraries folder.
  - Select the proper board. For me it is a "NodeMCU 1.0 (ESP-12E Module)".
