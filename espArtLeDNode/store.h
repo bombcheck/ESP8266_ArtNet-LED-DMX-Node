@@ -1,5 +1,5 @@
 /*
-ESP8266_LED-DMX-ArtNetNode v1.0.1
+ESP8266_ArtNet-LED-DMX-Node
 https://github.com/bombcheck/ESP8266_LED-DMX-ArtNetNode
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
@@ -64,7 +64,7 @@ struct StoreStruct {
   // The default values
   IPAddress(10,0,17,1), IPAddress(255,255,255,0), IPAddress(10,0,17,1), IPAddress(2,255,255,255), IPAddress(10,0,17,1), IPAddress(255,255,255,0), IPAddress(2,255,255,255), IPAddress(2,255,255,255),
   true, false,
-  "espLeDArtNode", "espLeDArtNode by Bombcheck", "", "", "espLeDArtNode", "espLeDArtNode",
+  "espArtLeDNode", "espArtLeDNode by Bombcheck", "", "", "espArtLeDNode", "espArtLeDNode",
   15,
   TYPE_WS2812, TYPE_DMX_OUT, PROT_ARTNET, PROT_ARTNET, MERGE_HTP, MERGE_HTP,
   1, 1, {0, 1, 2, 3}, 0, 0, {4, 5, 6, 7}, {1, 2, 3, 4}, {5, 6, 7, 8},

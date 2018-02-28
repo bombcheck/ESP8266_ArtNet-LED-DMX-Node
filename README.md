@@ -1,4 +1,4 @@
-# ESP8266_LED-DMX-ArtNetNode
+# ESP8266 ArtNet-LED-DMX-Node
 ESP8266 based WiFi ArtNet V4 to DMX, RDM and LED Pixels.
 
 Forked this from the great work of [Matthew Tong](https://github.com/mtongnz) because I love all kinds of shining/flashing/moving lighting stuff and needed some modifications to suit my needs.
@@ -11,7 +11,7 @@ Forked this from the great work of [Matthew Tong](https://github.com/mtongnz) be
  - Make sure to compile with a CPU Frequency of 160 MHz!
 
 ### First Boot
-On your first boot, the device will start a hotspot called "espLeDArtNode" with a password of "espLeDArtNode" (case sensitive).  Login to the hotspot and goto http://10.0.17.1 in a web browser.
+On your first boot, the device will start a hotspot called "espArtLeDNode" with a password of "espArtLeDNode" (case sensitive).  Login to the hotspot and goto http://10.0.17.1 in a web browser.
 
 Note that the hotspot is, by default, only for accessing the settings page.  You'll need to enable Stand Alone mode in the web UI if you want to send ArtNet data to the device in hotspot mode.
 

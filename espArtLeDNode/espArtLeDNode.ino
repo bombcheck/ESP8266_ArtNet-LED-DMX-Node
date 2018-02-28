@@ -1,5 +1,5 @@
 /*
-ESP8266_LED-DMX-ArtNetNode v1.0.1
+ESP8266_ArtNet-LED-DMX-Node
 https://github.com/bombcheck/ESP8266_LED-DMX-ArtNetNode
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
@@ -30,7 +30,7 @@ extern "C" {
   extern struct rst_info resetInfo;
 }
 
-#define FIRMWARE_VERSION "v1.0.1"
+#define FIRMWARE_VERSION "v1.0.2"
 #define ART_FIRM_VERSION 0x0200   // Firmware given over Artnet (2 bytes)
 
 
@@ -63,8 +63,8 @@ extern "C" {
   #define DMX_TX_B 2
 
   #define STATUS_LED_PIN 12
-//  #define STATUS_LED_MODE_WS2812
-  #define STATUS_LED_MODE_APA106
+  #define STATUS_LED_MODE_WS2812
+  //#define STATUS_LED_MODE_APA106
   #define STATUS_LED_A 0  // Physical wiring order for status LEDs
   #define STATUS_LED_B 1
   #define STATUS_LED_S 2
@@ -108,7 +108,7 @@ bool statusLedsOff = false;
 pixPatterns pixFXA(0, &pixDriver);
 pixPatterns pixFXB(1, &pixDriver);
 
-const char PROGMEM mainPage[] = "<!DOCTYPE html><meta content='text/html; charset=utf-8' http-equiv=Content-Type /><title>ESP8266 LED-DMX-ArtNetNode Config</title><meta content='Bombcheck - https://github.com/bombcheck' name=DC.creator /><meta content=en name=DC.language /><meta content='width=device-width,initial-scale=1' name=viewport /><link href=style.css rel=stylesheet /><div id=page><div class=inner><div class=mast><div class=title>esp8266<h1>ArtNet & sACN</h1>to<h1>DMX & LED Pixels</h1></div><ul class=nav><li class=first><a href='javascript: menuClick(1)'>Device Status</a><li><a href='javascript: menuClick(2)'>WiFi</a><li><a href='javascript: menuClick(3)'>IP & Name</a><li><a href='javascript: menuClick(4)'>Port A</a>"
+const char PROGMEM mainPage[] = "<!DOCTYPE html><meta content='text/html; charset=utf-8' http-equiv=Content-Type /><title>ESP8266 ArtNet-LED-DMX-Node Config</title><meta content=en name=DC.language /><meta content='width=device-width,initial-scale=1' name=viewport /><link href=style.css rel=stylesheet /><div id=page><div class=inner><div class=mast><div class=title>esp8266<h1>ArtNet & sACN</h1>to<h1>DMX & LED Pixels</h1></div><ul class=nav><li class=first><a href='javascript: menuClick(1)'>Device Status</a><li><a href='javascript: menuClick(2)'>WiFi</a><li><a href='javascript: menuClick(3)'>IP & Name</a><li><a href='javascript: menuClick(4)'>Port A</a>"
     #ifndef ONE_PORT
       "<li><a href='javascript: menuClick(5)'>Port B</a>"
     #endif
