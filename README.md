@@ -74,8 +74,8 @@ These boards use strange numbering that doesn't match the ESP8266 numbering.  He
 
 | NodeMCU & Wemos | ESP8266 GPIO | Purpose |
 |-----------------|--------------|---------|
-| TX | GPIO1 | DMX_TX_A |
-| D4 | GPIO2 | DMX_TX_B |
+| TX | GPIO1 | DMX_TX_A (Port 1) |
+| D4 | GPIO2 | DMX_TX_B (Port 2) |
 | RX | GPIO3 | DMX_RX (for A & B) |
 | D1 | GPIO5 | DMX_DIR_A |
 | D0 | GPIO16 | DMX_DIR_B |
