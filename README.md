@@ -1,4 +1,4 @@
-# ESP8266 ArtNet-LED-DMX-Node
+# ESP8266 ArtNet-LED-DMX-Node [![GitHub release](https://img.shields.io/github/release/bombcheck/ESP8266_ArtNet-LED-DMX-Node.svg)](https://github.com/bombcheck/ESP8266_ArtNet-LED-DMX-Node/releases/latest)
 ESP8266 based WiFi ArtNet V4 to DMX, RDM and LED Pixels.
 
 Forked this from the great work of [Matthew Tong](https://github.com/mtongnz) because I love all kinds of shining/flashing/moving lighting stuff and needed some modifications to suit my needs.
