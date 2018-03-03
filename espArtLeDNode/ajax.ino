@@ -741,4 +741,3 @@ void ajaxLoad(uint8_t page, JsonObject& jsonReply) {
       jsonReply["message"] = "Invalid or incomplete data received.";
   }
 }
-
