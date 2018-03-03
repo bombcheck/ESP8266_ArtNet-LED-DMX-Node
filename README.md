@@ -13,7 +13,7 @@ Check the 'release'-section for the latest ready-to-flash-binaries. Download and
  - You need the latest ESP8266 Arduino Core files and the latest Arduino IDE version.
  - Make sure you placed the libraries from this project into your Arduino libraries folder.
  - Select the proper board. For me it is a "NodeMCU 1.0 (ESP-12E Module)".
- - Make sure to compile with a CPU Frequency of 160 MHz!
+ - Make sure to compile with a CPU Frequency of 160 MHz and IwIP v1.4!
 
 ### First Boot
 On your first boot, the device will start a hotspot called "espArtLeDNode" with a password of "espArtLeDNode" (case sensitive).  Login to the hotspot and goto http://10.0.17.1 in a web browser.
