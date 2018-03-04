@@ -48,7 +48,7 @@ extern "C" {
 
 
 #ifdef ESP_01
-  #define DMX_DIR_A 3
+  #define DMX_DIR_A 5
   #define DMX_TX_A 1
   #define ONE_PORT
   #define NO_RESET
