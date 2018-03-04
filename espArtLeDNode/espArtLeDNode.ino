@@ -30,7 +30,7 @@ extern "C" {
   extern struct rst_info resetInfo;
 }
 
-#define FIRMWARE_VERSION "v1.0.3-dev1"
+#define FIRMWARE_VERSION "v1.0.3-dev2"
 #define ART_FIRM_VERSION 0x0200   // Firmware given over Artnet (2 bytes)
 
 
@@ -48,7 +48,7 @@ extern "C" {
 
 
 #ifdef ESP_01
-  #define DMX_DIR_A 5
+  #define DMX_DIR_A 2
   #define DMX_TX_A 1
   #define ONE_PORT
   #define NO_RESET
