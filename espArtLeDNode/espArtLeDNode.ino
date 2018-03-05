@@ -136,7 +136,7 @@ byte* dataIn;
 void setup(void) {
   //pinMode(4, OUTPUT);
   //digitalWrite(4, LOW);
-  Serial.begin(115200); // to match bootloader baudrate
+  Serial.begin(74880); // to match bootloader baudrate
   Serial.setDebugOutput(true);
   //ESP.wdtEnable(3500);//enable SW WDT
   // Make direction input to avoid boot garbage being sent out
@@ -197,7 +197,6 @@ void setup(void) {
   */
 
   deviceSettings.wdtCounter = 0;
-
   deviceSettings.resetCounter =0;
 
   // Store values
