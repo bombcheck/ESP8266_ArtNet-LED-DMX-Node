@@ -30,7 +30,7 @@ extern "C" {
   extern struct rst_info resetInfo;
 }
 
-#define FIRMWARE_VERSION "v1.0.3-dev2"
+#define FIRMWARE_VERSION "v1.0.3-dev3"
 #define ART_FIRM_VERSION 0x0200   // Firmware given over Artnet (2 bytes)
 
 
@@ -38,7 +38,6 @@ extern "C" {
 //#define NO_RESET            // Un comment to disable the reset button
 
 // Wemos boards use 4M (3M SPIFFS) compiler option
-
 
 #define ARTNET_OEM 0x0123    // Artnet OEM Code
 #define ESTA_MAN 0x08DD      // ESTA Manufacturer Code
@@ -76,7 +75,6 @@ extern "C" {
 #ifndef NO_RESET
   #define SETTINGS_RESET 14
 #endif
-
 
 // Definitions for status leds  xxBBRRGG
 #define BLACK 0x00000000
@@ -140,7 +138,7 @@ void setup(void) {
   //digitalWrite(4, LOW);
   Serial.begin(74880); // to match bootloader baudrate
   Serial.setDebugOutput(true);
-  //ESP.wdtEnable(3500);//enable SW WDT
+  ESP.wdtEnable(3500);//enable SW WDT
   // Make direction input to avoid boot garbage being sent out
   pinMode(DMX_DIR_A, OUTPUT);
   digitalWrite(DMX_DIR_A, LOW);

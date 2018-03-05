@@ -28,11 +28,7 @@ In the Wifi tab, enter your SSID and password.  Click save (it should go green a
 If the device can't connect to the wifi or get a DHCP assigned address within (Start Delay) seconds, it will start the hotspot and wait for 30 seconds for you to connect.  If a client doesn't connect to the hotspot in time, the device will restart and try again.
 
 ### Restore Factory Defaults
-I have allowed for 2 methods to restore the factory default settings: using a dedicated factory reset button on GPIO14 or multiple power cycles.
-
-Method 1: Hold GPIO14 to GND while the device boots.
-
-Method 2: Allow the esp8266 about 1-4 seconds to start, then reset it (or power cycle).  Do this at least 5 times to restore factory default settings.
+Hold GPIO14 to GND while the device boots.
 
 ## Features
  - sACN and ArtNet V4 support
