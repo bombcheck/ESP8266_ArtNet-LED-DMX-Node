@@ -30,7 +30,7 @@ extern "C" {
   extern struct rst_info resetInfo;
 }
 
-#define FIRMWARE_VERSION "v1.0.3-dev14"
+#define FIRMWARE_VERSION "v1.0.3-dev15"
 #define ART_FIRM_VERSION 0x0200   // Firmware given over Artnet (2 bytes)
 
 
@@ -275,7 +275,8 @@ void loop(void){
   }
   webServer.handleClient();
 
-  delay(7);
+  // Trying some sort of timing adjustments to fight crashes
+  delay(5);
   
   // Get the node details and handle Artnet
   doNodeReport();
