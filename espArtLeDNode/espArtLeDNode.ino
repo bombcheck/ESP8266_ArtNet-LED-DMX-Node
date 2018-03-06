@@ -30,7 +30,7 @@ extern "C" {
   extern struct rst_info resetInfo;
 }
 
-#define FIRMWARE_VERSION "v1.0.3-dev10"
+#define FIRMWARE_VERSION "v1.0.3-dev13"
 #define ART_FIRM_VERSION 0x0200   // Firmware given over Artnet (2 bytes)
 
 
@@ -94,6 +94,7 @@ uint8_t MAC_array[6];
 uint8_t dmxInSeqID = 0;
 uint8_t statusLedData[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 uint32_t statusTimer = 0;
+uint32_t wifiCheckTimer = 0;
 
 esp8266ArtNetRDM artRDM;
 ESP8266WebServer webServer(80);
@@ -241,7 +242,7 @@ void setup(void) {
     case REASON_WDT_RST: // hardware watch dog reset
     case REASON_EXCEPTION_RST: // exception reset, GPIO status won’t change
     case REASON_SOFT_WDT_RST: // software watch dog reset, GPIO status won’t change
-      ESP.reset();
+      ESP.restart();
       break;
     case REASON_DEEP_SLEEP_AWAKE:
       // not used
@@ -262,14 +263,19 @@ void loop(void){
     eepromSave();
   }
   */
-  //connect wifi if not connected
-  if (WiFi.status() != WL_CONNECTED) {
-    delay(1);
-    wifiStart();
-    ESP.wdtFeed();
-    return;
+  //connect wifi if not connected (check every 5 seconds)
+  if (wifiCheckTimer < millis()) {
+    if (WiFi.status() != WL_CONNECTED) {
+      delay(1);
+      wifiStart();
+      ESP.wdtFeed();
+      return;
+    }
+    wifiCheckTimer = millis() + 5000;
   }
   webServer.handleClient();
+
+  delay(7);
   
   // Get the node details and handle Artnet
   doNodeReport();
