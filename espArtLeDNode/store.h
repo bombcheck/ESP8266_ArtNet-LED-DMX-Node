@@ -79,9 +79,9 @@ struct StoreStruct {
 void eepromSave() {
   for (uint16_t t = 0; t < sizeof(deviceSettings); t++)
     EEPROM.write(CONFIG_START + t, *((char*)&deviceSettings + t));
-    Serial.println("save");
-    Serial.println(deviceSettings.wifiSSID);
-    Serial.println(deviceSettings.wifiPass);
+    //Serial.println("save");
+    //Serial.println(deviceSettings.wifiSSID);
+    //Serial.println(deviceSettings.wifiPass);
 
     EEPROM.commit();
 }
@@ -102,9 +102,9 @@ void eepromLoad() {
     for (uint16_t t = 0; t < sizeof(deviceSettings); t++)
       *((char*)&deviceSettings + t) = EEPROM.read(CONFIG_START + t);
 
-    Serial.println("load+");
-    Serial.println(deviceSettings.wifiSSID);
-    Serial.println(deviceSettings.wifiPass);
+    //Serial.println("load+");
+    //Serial.println(deviceSettings.wifiSSID);
+    //Serial.println(deviceSettings.wifiPass);
 
     // If we want to restore all our settings
     /*

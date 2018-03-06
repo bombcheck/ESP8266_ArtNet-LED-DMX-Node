@@ -30,7 +30,7 @@ extern "C" {
   extern struct rst_info resetInfo;
 }
 
-#define FIRMWARE_VERSION "v1.0.3-dev13"
+#define FIRMWARE_VERSION "v1.0.3-dev14"
 #define ART_FIRM_VERSION 0x0200   // Firmware given over Artnet (2 bytes)
 
 
@@ -137,8 +137,8 @@ byte* dataIn;
 void setup(void) {
   //pinMode(4, OUTPUT);
   //digitalWrite(4, LOW);
-  Serial.begin(74880); // to match bootloader baudrate
-  Serial.setDebugOutput(true);
+  //Serial.begin(74880); // to match bootloader baudrate
+  //Serial.setDebugOutput(true);
   ESP.wdtEnable(WDTO_8S); //enable SW WDT with 8s timeout
   
   // Make direction input to avoid boot garbage being sent out
