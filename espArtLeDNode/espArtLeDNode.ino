@@ -30,7 +30,7 @@ extern "C" {
   extern struct rst_info resetInfo;
 }
 
-#define FIRMWARE_VERSION "v1.0.3-dev16"
+#define FIRMWARE_VERSION "v1.0.3-dev18"
 #define ART_FIRM_VERSION 0x0200   // Firmware given over Artnet (2 bytes)
 
 
@@ -135,6 +135,15 @@ bool doReboot = false;
 byte* dataIn;
 
 void setup(void) {
+  // Restart if crashed before
+  switch (resetInfo.reason) {
+    case REASON_WDT_RST: // hardware watch dog reset
+    case REASON_EXCEPTION_RST: // exception reset, GPIO status won’t change
+    case REASON_SOFT_WDT_RST: // software watch dog reset, GPIO status won’t change
+      ESP.restart();
+      break;
+  }
+  
   //pinMode(4, OUTPUT);
   //digitalWrite(4, LOW);
   //Serial.begin(74880); // to match bootloader baudrate
@@ -238,15 +247,6 @@ void setup(void) {
         deviceSettings.doFirmwareUpdate = false;   
       }
     break;
-
-    case REASON_WDT_RST: // hardware watch dog reset
-    case REASON_EXCEPTION_RST: // exception reset, GPIO status won’t change
-    case REASON_SOFT_WDT_RST: // software watch dog reset, GPIO status won’t change
-      ESP.restart();
-      break;
-    case REASON_DEEP_SLEEP_AWAKE:
-      // not used
-      break;
   }
 
   delay(10);
