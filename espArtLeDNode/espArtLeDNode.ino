@@ -30,7 +30,7 @@ extern "C" {
   extern struct rst_info resetInfo;
 }
 
-#define FIRMWARE_VERSION "v1.0.3-dev3"
+#define FIRMWARE_VERSION "v1.0.3-dev10"
 #define ART_FIRM_VERSION 0x0200   // Firmware given over Artnet (2 bytes)
 
 
@@ -138,7 +138,8 @@ void setup(void) {
   //digitalWrite(4, LOW);
   Serial.begin(74880); // to match bootloader baudrate
   Serial.setDebugOutput(true);
-  //ESP.wdtEnable(3500);//enable SW WDT
+  ESP.wdtEnable(WDTO_8S); //enable SW WDT with 8s timeout
+  
   // Make direction input to avoid boot garbage being sent out
   pinMode(DMX_DIR_A, OUTPUT);
   digitalWrite(DMX_DIR_A, LOW);
@@ -211,36 +212,36 @@ void setup(void) {
   webStart();
 
   switch (resetInfo.reason) {
-    case REASON_DEFAULT_RST:  // normal start
-    case REASON_EXT_SYS_RST:
-    case REASON_SOFT_RESTART:
+    case REASON_DEFAULT_RST:  // normal startup by power on
+    case REASON_EXT_SYS_RST: // external system reset
+    case REASON_SOFT_RESTART: // software restart ,system_restart , GPIO status won’t change
 
-  // Don't start our Artnet or DMX in firmware update mode or after multiple WDT resets
-  if (!deviceSettings.doFirmwareUpdate) {// && deviceSettings.wdtCounter <= 3) {
+      // Don't start our Artnet or DMX in firmware update mode or after multiple WDT resets
+      if (!deviceSettings.doFirmwareUpdate) {// && deviceSettings.wdtCounter <= 3) {
 
-    // We only allow 1 DMX input - and RDM can't run alongside DMX in
-    if (deviceSettings.portAmode == TYPE_DMX_IN && deviceSettings.portBmode == TYPE_RDM_OUT)
-      deviceSettings.portBmode = TYPE_DMX_OUT;
+      // We only allow 1 DMX input - and RDM can't run alongside DMX in
+      if (deviceSettings.portAmode == TYPE_DMX_IN && deviceSettings.portBmode == TYPE_RDM_OUT)
+        deviceSettings.portBmode = TYPE_DMX_OUT;
     
-    // Setup Artnet Ports & Callbacks
-    artStart();
+        // Setup Artnet Ports & Callbacks
+        artStart();
 
-    // Don't open any ports for a bit to let the ESP spill it's garbage to serial
-    while (millis() < 3500)
-      yield();
+        // Don't open any ports for a bit to let the ESP spill it's garbage to serial
+        while (millis() < 3500)
+          yield();
     
-    // Port Setup
-    portSetup();
+        // Port Setup
+        portSetup();
 
-  } else
-    deviceSettings.doFirmwareUpdate = false;   
-      break;
+      } else {
+        deviceSettings.doFirmwareUpdate = false;   
+      }
+    break;
 
-    case REASON_WDT_RST:     
-      break;
-    case REASON_EXCEPTION_RST:
-      break;
-    case REASON_SOFT_WDT_RST:
+    case REASON_WDT_RST: // hardware watch dog reset
+    case REASON_EXCEPTION_RST: // exception reset, GPIO status won’t change
+    case REASON_SOFT_WDT_RST: // software watch dog reset, GPIO status won’t change
+      ESP.reset();
       break;
     case REASON_DEEP_SLEEP_AWAKE:
       // not used
@@ -251,6 +252,9 @@ void setup(void) {
 }
 
 void loop(void){
+  // Feed the watchdog
+  ESP.wdtFeed();
+  
   // If the device lasts for 6 seconds, clear our reset timers
   /* if (deviceSettings.resetCounter != 0 && millis() > 6000) {
     deviceSettings.resetCounter = 0;
@@ -262,6 +266,7 @@ void loop(void){
   if (WiFi.status() != WL_CONNECTED) {
     delay(1);
     wifiStart();
+    ESP.wdtFeed();
     return;
   }
   webServer.handleClient();
