@@ -30,7 +30,7 @@ extern "C" {
   extern struct rst_info resetInfo;
 }
 
-#define FIRMWARE_VERSION "v1.0.3-dev18"
+#define FIRMWARE_VERSION "v1.0.3-dev19"
 #define ART_FIRM_VERSION 0x0200   // Firmware given over Artnet (2 bytes)
 
 
@@ -94,7 +94,7 @@ uint8_t MAC_array[6];
 uint8_t dmxInSeqID = 0;
 uint8_t statusLedData[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 uint32_t statusTimer = 0;
-uint32_t wifiCheckTimer = 0;
+//uint32_t wifiCheckTimer = 0;
 
 esp8266ArtNetRDM artRDM;
 ESP8266WebServer webServer(80);
@@ -264,7 +264,8 @@ void loop(void){
   }
   */
   //connect wifi if not connected (check every 5 seconds)
-  if (wifiCheckTimer < millis()) {
+  //Not needed because: WiFi.setAutoReconnect(true) in wifiStart();
+  /* if (wifiCheckTimer < millis()) {
     if (WiFi.status() != WL_CONNECTED) {
       delay(1);
       wifiStart();
@@ -272,7 +273,7 @@ void loop(void){
       return;
     }
     wifiCheckTimer = millis() + 5000;
-  }
+  } */
   webServer.handleClient();
 
   // Trying some sort of timing adjustments to fight crashes
