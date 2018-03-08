@@ -380,6 +380,7 @@ void wifiStart() {
         // Serial.println("Failed to connect to WiFi. Please verify credentials: ");
         // delay(1000);
         startHotspot();
+        return;
       }
       delay(100);
       // Serial.print(".");
