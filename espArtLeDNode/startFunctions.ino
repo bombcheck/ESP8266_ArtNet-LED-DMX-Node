@@ -437,13 +437,13 @@ void startHotspot() {
   unsigned long endTime = millis() + 30000;
 
   // Stay here if not in stand alone mode - no dmx or artnet
-  //while (endTime > millis() || wifi_softap_get_station_num() > 0) { // if 30 seconds has passed or client connected
-    while (true){
+  while (endTime > millis() || wifi_softap_get_station_num() > 0) { // if 30 seconds has passed or client connected
+    //while (true){
     webServer.handleClient();
-    //yield();
-    delay(1);
+    yield();
+    //delay(1);
   }
 
-  //ESP.restart();
-  //isHotspot = false;
+  isHotspot = false;
+  ESP.restart();
 }
