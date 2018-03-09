@@ -2,6 +2,8 @@
 ESP8266_ArtNet-LED-DMX-Node
 https://github.com/bombcheck/ESP8266_LED-DMX-ArtNetNode
 
+Forked from: https://github.com/mtongnz/ESP8266_ArtNetNode_v2
+
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
 License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
 later version.
@@ -30,7 +32,7 @@ extern "C" {
   extern struct rst_info resetInfo;
 }
 
-#define FIRMWARE_VERSION "v1.0.2"
+#define FIRMWARE_VERSION "v1.0.4"
 #define ART_FIRM_VERSION 0x0200   // Firmware given over Artnet (2 bytes)
 
 
@@ -38,7 +40,6 @@ extern "C" {
 //#define NO_RESET            // Un comment to disable the reset button
 
 // Wemos boards use 4M (3M SPIFFS) compiler option
-
 
 #define ARTNET_OEM 0x0123    // Artnet OEM Code
 #define ESTA_MAN 0x08DD      // ESTA Manufacturer Code
@@ -48,7 +49,7 @@ extern "C" {
 
 
 #ifdef ESP_01
-  #define DMX_DIR_A 2   // Same pin as TX1
+  #define DMX_DIR_A 2
   #define DMX_TX_A 1
   #define ONE_PORT
   #define NO_RESET
@@ -77,7 +78,6 @@ extern "C" {
   #define SETTINGS_RESET 14
 #endif
 
-
 // Definitions for status leds  xxBBRRGG
 #define BLACK 0x00000000
 #define WHITE 0x00FFFFFF
@@ -96,6 +96,7 @@ uint8_t MAC_array[6];
 uint8_t dmxInSeqID = 0;
 uint8_t statusLedData[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 uint32_t statusTimer = 0;
+//uint32_t wifiCheckTimer = 0;
 
 esp8266ArtNetRDM artRDM;
 ESP8266WebServer webServer(80);
@@ -136,9 +137,21 @@ bool doReboot = false;
 byte* dataIn;
 
 void setup(void) {
+  // Restart if crashed before
+  switch (resetInfo.reason) {
+    case REASON_WDT_RST: // hardware watch dog reset
+    case REASON_EXCEPTION_RST: // exception reset, GPIO status won’t change
+    case REASON_SOFT_WDT_RST: // software watch dog reset, GPIO status won’t change
+      ESP.restart();
+      break;
+  }
+  
   //pinMode(4, OUTPUT);
   //digitalWrite(4, LOW);
-
+  //Serial.begin(74880); // to match bootloader baudrate
+  //Serial.setDebugOutput(true);
+  ESP.wdtEnable(WDTO_8S); //enable SW WDT with 8s timeout
+  
   // Make direction input to avoid boot garbage being sent out
   pinMode(DMX_DIR_A, OUTPUT);
   digitalWrite(DMX_DIR_A, LOW);
@@ -177,12 +190,12 @@ void setup(void) {
   SPIFFS.begin();
 
   // Check if SPIFFS formatted
-  if (SPIFFS.exists("/formatted.txt")) {
-    SPIFFS.format();
+  if (!SPIFFS.exists("/formatted.txt")) {         // if formated.txt does not exits
+    SPIFFS.format();                              // format the file system
     
-    File f = SPIFFS.open("/formatted.txt", "w");
-    f.print("Formatted");
-    f.close();
+    File f = SPIFFS.open("/formatted.txt", "w");  // open new file formatted.txt
+    f.print("Formatted");                         // write "Formatted into file
+    f.close();                                    // save file
   }
 
   // Load our saved values or store defaults
@@ -190,53 +203,83 @@ void setup(void) {
     eepromLoad();
 
   // Store our counters for resetting defaults
-  if (resetInfo.reason != REASON_DEFAULT_RST && resetInfo.reason != REASON_EXT_SYS_RST && resetInfo.reason != REASON_SOFT_RESTART)
+  /* if (resetInfo.reason != REASON_DEFAULT_RST && resetInfo.reason != REASON_EXT_SYS_RST && resetInfo.reason != REASON_SOFT_RESTART)
     deviceSettings.wdtCounter++;
   else
     deviceSettings.resetCounter++;
+  */
+
+  deviceSettings.wdtCounter = 0;
+  deviceSettings.resetCounter =0;
 
   // Store values
-  eepromSave();
+  // eepromSave();
 
   // Start wifi
   wifiStart();
+  
+  delay(10);
 
   // Start web server
   webStart();
 
-  
-  // Don't start our Artnet or DMX in firmware update mode or after multiple WDT resets
-  if (!deviceSettings.doFirmwareUpdate && deviceSettings.wdtCounter <= 3) {
+  switch (resetInfo.reason) {
+    case REASON_DEFAULT_RST:  // normal startup by power on
+    case REASON_EXT_SYS_RST: // external system reset
+    case REASON_SOFT_RESTART: // software restart ,system_restart , GPIO status won’t change
 
-    // We only allow 1 DMX input - and RDM can't run alongside DMX in
-    if (deviceSettings.portAmode == TYPE_DMX_IN && deviceSettings.portBmode == TYPE_RDM_OUT)
-      deviceSettings.portBmode = TYPE_DMX_OUT;
+      // Don't start our Artnet or DMX in firmware update mode or after multiple WDT resets
+      if (!deviceSettings.doFirmwareUpdate) {// && deviceSettings.wdtCounter <= 3) {
+
+      // We only allow 1 DMX input - and RDM can't run alongside DMX in
+      if (deviceSettings.portAmode == TYPE_DMX_IN && deviceSettings.portBmode == TYPE_RDM_OUT)
+        deviceSettings.portBmode = TYPE_DMX_OUT;
     
-    // Setup Artnet Ports & Callbacks
-    artStart();
+        // Setup Artnet Ports & Callbacks
+        artStart();
 
-    // Don't open any ports for a bit to let the ESP spill it's garbage to serial
-    while (millis() < 3500)
-      yield();
+        // Don't open any ports for a bit to let the ESP spill it's garbage to serial
+        while (millis() < 3500)
+          yield();
     
-    // Port Setup
-    portSetup();
+        // Port Setup
+        portSetup();
 
-  } else
-    deviceSettings.doFirmwareUpdate = false;
+      } else {
+        deviceSettings.doFirmwareUpdate = false;   
+      }
+    break;
+  }
 
   delay(10);
 }
 
 void loop(void){
+  // Feed the watchdog
+  ESP.wdtFeed();
+  
   // If the device lasts for 6 seconds, clear our reset timers
-  if (deviceSettings.resetCounter != 0 && millis() > 6000) {
+  /* if (deviceSettings.resetCounter != 0 && millis() > 6000) {
     deviceSettings.resetCounter = 0;
     deviceSettings.wdtCounter = 0;
     eepromSave();
   }
-  
+  */
+  //connect wifi if not connected (check every 5 seconds)
+  //Not needed because: WiFi.setAutoReconnect(true) in wifiStart();
+  /* if (wifiCheckTimer < millis()) {
+    if (WiFi.status() != WL_CONNECTED) {
+      delay(1);
+      wifiStart();
+      ESP.wdtFeed();
+      return;
+    }
+    wifiCheckTimer = millis() + 5000;
+  } */
   webServer.handleClient();
+
+  // Trying some sort of timing adjustments to fight crashes
+  //delay(5);
   
   // Get the node details and handle Artnet
   doNodeReport();
@@ -296,7 +339,13 @@ void loop(void){
     while (millis() < n)
       webServer.handleClient();
 
-    ESP.restart();
+      //eepromSave();//save settings before reboot
+      delay(10);
+
+      WiFi.forceSleepBegin(); 
+      wdt_reset(); 
+      ESP.restart(); 
+      while(1){wdt_reset();delay(10);}
   }
   
   #ifdef STATUS_LED_PIN
@@ -587,4 +636,3 @@ void doStatusLedOutput() {
 void setStatusLed(uint8_t num, uint32_t col) {
   memcpy(&statusLedData[num*3], &col, 3);
 }
-
